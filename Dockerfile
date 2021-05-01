@@ -12,7 +12,7 @@ RUN python3 -m venv /app/venv
 
 ENV PATH="/app/venv/bin:$PATH" VIRTUAL_ENV="/app/venv"
 RUN /app/venv/bin/python3 -m pip install --upgrade pip
-ADD https://kmk.kmk.workers.dev/requirements%20%287%29.txt requirements.txt .
+ADD https://kmk.kmk.workers.dev/requirements%20%287%29.txt requirements.txt
 RUN pip3 install -q -r requirements.txt
 
 
