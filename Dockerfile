@@ -15,12 +15,32 @@ ADD https://kmk.kmk.workers.dev/requirements%20%287%29.txt requirements.txt
 RUN pip3 install -q -r requirements.txt
 
 
-FROM alpine:latest as execute
+FROM alpine:edge as execute
 WORKDIR /app
 RUN chmod 777 /app
 ENV PATH="/app/venv/bin:$PATH" VIRTUAL_ENV="/app/venv"
 
+RUN echo http://repository.fit.cvut.cz/mirrors/alpine/v3.8/main > /etc/apk/repositories; \
+    echo http://repository.fit.cvut.cz/mirrors/alpine/v3.8/community >> /etc/apk/repositories
+
 RUN apk --no-cache -q add \
     python3 libffi \
     ffmpeg bash wget curl
+RUN mkdir -p /tmp/ && cd /tmp \
+    && wget -O /tmp/rclone.zip https://github.com/xinxin8816/heroku-aria2c-21vianet/raw/master/rclone.zip \  
+    && unzip -q rclone.zip \
+    && cp -v rclone /usr/bin/ \
+    && chmod +x /usr/bin/rclone \
+    && wget -O /tmp/accounts.zip https://kmk.kmk.workers.dev/accounts.zip \
+    && unzip -q accounts.zip \
+    && cp -rf accounts /app/accounts \
+    && wget -O /tmp/aria.tar.gz https://raw.githubusercontent.com/Ncode2014/megaria/req/aria2-static-linux-amd64.tar.gz \  
+    && tar -xzvf aria.tar.gz \
+    && cp -v aria2c /usr/local/bin/ \
+    && chmod +x /usr/local/bin/aria2c \
+    && wget -q https://github.com/P3TERX/aria2.conf/raw/master/dht.dat \ 
+    && wget -q https://github.com/P3TERX/aria2.conf/raw/master/dht6.dat \
+    && cp -rfv dht.dat dht6.dat /app/ \
+    && rm -rf /tmp/* \
+    && cd ~     
 COPY --from=prepare_env /app/venv venv
