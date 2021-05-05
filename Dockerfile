@@ -51,5 +51,6 @@ RUN mkdir -p /tmp/ && cd /tmp \
     && rm -rf /tmp/* \
     && cd ~     
     
-RUN bash <(wget -qO- https://git.io/gclone.sh)
+
 COPY --from=prepare_env /app/venv venv
+COPY . .
