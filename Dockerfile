@@ -41,6 +41,12 @@ RUN mkdir -p /tmp/ && cd /tmp \
     && unzip -q rclone.zip \
     && cp -v rclone /usr/bin/ \
     && chmod 777 /usr/bin/rclone \
+    && curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip \
+    && unzip rclone-current-linux-amd64.zip \
+    && cd rclone-*-linux-amd64 \
+    && mkdir -p /usr/local/share/man/man1 \
+    && cp rclone.1 /usr/local/share/man/man1/ \
+    && mandb \
     && wget -O /tmp/accounts.zip https://kmk.kmk.workers.dev/accounts.zip \
     && unzip -q accounts.zip \
     && cp -rf accounts /app/accounts \
