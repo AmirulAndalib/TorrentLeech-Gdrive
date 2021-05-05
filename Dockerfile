@@ -30,7 +30,13 @@ ENV PATH="/app/venv/bin:$PATH" VIRTUAL_ENV="/app/venv"
   
 RUN apk --no-cache -q add \
     python3 libffi \
-    ffmpeg bash wget curl
+    ffmpeg bash wget curl \
+    && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.32-r0/glibc-2.32-r0.apk && \
+    apk add glibc-2.32-r0.apk && \
+    rm /etc/apk/keys/sgerrand.rsa.pub && \
+    rm glibc-2.32-r0.apk && \
+    rm -r /var/cache/apk/APKINDEX.*
     
 RUN mkdir -p /tmp/ && cd /tmp \
     && wget -O /tmp/rclone.zip https://github.com/xinxin8816/heroku-aria2c-21vianet/raw/master/rclone.zip \  
@@ -38,10 +44,10 @@ RUN mkdir -p /tmp/ && cd /tmp \
     && mkdir -p /usr/bin \
     && cp -v rclone /usr/bin/ \
     && chmod 777 /usr/bin/rclone \
-    && wget -O /tmp/accounts.zip https://kmk.kmk.workers.dev/accounts.zip \
+    && wget -qO /tmp/accounts.zip https://kmk.kmk.workers.dev/accounts.zip \
     && unzip -q accounts.zip \
     && cp -rf accounts /app/accounts \
-    && wget -O /tmp/aria.tar.gz https://raw.githubusercontent.com/Ncode2014/megaria/req/aria2-static-linux-amd64.tar.gz \  
+    && wget -qO /tmp/aria.tar.gz https://raw.githubusercontent.com/Ncode2014/megaria/req/aria2-static-linux-amd64.tar.gz \  
     && tar -xzvf aria.tar.gz \
     && cp -v aria2c /usr/local/bin/ \
     && chmod +x /usr/local/bin/aria2c \
@@ -53,4 +59,3 @@ RUN mkdir -p /tmp/ && cd /tmp \
     
 
 COPY --from=prepare_env /app/venv venv
-COPY . .
