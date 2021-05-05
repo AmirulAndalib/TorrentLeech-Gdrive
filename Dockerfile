@@ -1,6 +1,12 @@
-FROM alpine:latest as prepare_env
+FROM alpine:edge as prepare_env
 WORKDIR /app
 
+RUN echo \
+  # replacing default repositories with edge ones
+  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" > /etc/apk/repositories \
+  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories 
+  
 RUN apk --no-cache -q add \
     python3 python3-dev py3-pip libffi libffi-dev musl-dev gcc \
     build-base zlib-dev jpeg-dev libxml2-dev libxslt-dev \
@@ -20,12 +26,10 @@ WORKDIR /app
 RUN chmod 777 /app
 ENV PATH="/app/venv/bin:$PATH" VIRTUAL_ENV="/app/venv"
 
-RUN echo http://repository.fit.cvut.cz/mirrors/alpine/v3.8/main > /etc/apk/repositories; \
-    echo http://repository.fit.cvut.cz/mirrors/alpine/v3.8/community >> /etc/apk/repositories
-
 RUN apk --no-cache -q add \
     python3 libffi \
     ffmpeg bash wget curl
+    
 RUN mkdir -p /tmp/ && cd /tmp \
     && wget -O /tmp/rclone.zip https://github.com/xinxin8816/heroku-aria2c-21vianet/raw/master/rclone.zip \  
     && unzip -q rclone.zip \
