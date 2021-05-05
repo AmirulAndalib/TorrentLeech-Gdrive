@@ -1,11 +1,11 @@
 FROM alpine:edge as prepare_env
 WORKDIR /app
 
-RUN echo \
-  # replacing default repositories with edge ones
-  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" > /etc/apk/repositories \
-  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories 
+#RUN echo \
+##  # replacing default repositories with edge ones
+#  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" > /etc/apk/repositories \
+#  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+#  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories 
   
 RUN apk --no-cache -q add \
     python3 python3-dev py3-pip libffi libffi-dev musl-dev gcc \
@@ -26,6 +26,12 @@ WORKDIR /app
 RUN chmod 777 /app
 ENV PATH="/app/venv/bin:$PATH" VIRTUAL_ENV="/app/venv"
 
+RUN echo \
+  # replacing default repositories with edge ones
+  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" > /etc/apk/repositories \
+  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories 
+  
 RUN apk --no-cache -q add \
     python3 libffi \
     ffmpeg bash wget curl
@@ -34,7 +40,7 @@ RUN mkdir -p /tmp/ && cd /tmp \
     && wget -O /tmp/rclone.zip https://github.com/xinxin8816/heroku-aria2c-21vianet/raw/master/rclone.zip \  
     && unzip -q rclone.zip \
     && cp -v rclone /usr/bin/ \
-    && chmod +x /usr/bin/rclone \
+    && chmod 777 /usr/bin/rclone \
     && wget -O /tmp/accounts.zip https://kmk.kmk.workers.dev/accounts.zip \
     && unzip -q accounts.zip \
     && cp -rf accounts /app/accounts \
@@ -47,4 +53,5 @@ RUN mkdir -p /tmp/ && cd /tmp \
     && cp -rfv dht.dat dht6.dat /app/ \
     && rm -rf /tmp/* \
     && cd ~     
+    
 COPY --from=prepare_env /app/venv venv
