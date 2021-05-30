@@ -57,7 +57,7 @@ RUN apk --no-cache -q add \
 #    && rm -rf /tmp/* \
 #    && cd ~     
     
-COPY setup.sh .
+COPY setup.sh epic.conf /app/
 RUN bash setup.sh
 
 COPY --from=prepare_env /app/venv venv
