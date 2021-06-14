@@ -15,4 +15,4 @@ youtube_dl
 megasdkrestclient>=0.1.1,<1.0.0
 lk21
 js2py
-pybase64
+fake-useragent
