@@ -1,6 +1,5 @@
 requests
 psutil
-python-telegram-bot==12.6.1
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
@@ -12,7 +11,5 @@ beautifulsoup4
 pyrogram
 TgCrypto
 youtube_dl
-megasdkrestclient>=0.1.1,<1.0.0
 lk21
-js2py
 fake-useragent
