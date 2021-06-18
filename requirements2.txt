@@ -12,4 +12,6 @@ pyrogram
 TgCrypto
 youtube_dl
 lk21
+js2py
+lxml
 fake-useragent
